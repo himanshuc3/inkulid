@@ -1,4 +1,4 @@
-use std::fs;
+use std::fs::read_to_string;
 // NOTES:
 // Options enum enables returning none/nul/nil
 // pub enum Option<T> {
@@ -21,7 +21,7 @@ fn find_first_a(s: String) -> Option<i32> {
 // Result and Options use generics to support different types
 // instead of implementing it bound to a type
 fn read_file_contents() {
-    let greeting_file_result = fs::read_to_string("hello.txt");
+    let greeting_file_result = read_to_string("hello.txt");
 
     // NOTE:
     // Similar to how golang treat errors as values instead of

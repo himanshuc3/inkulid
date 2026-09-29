@@ -85,7 +85,7 @@ func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
 	return true
 }
 
-func TestLetStatements(t *testing.T) {
+func TestReturnStatements(t *testing.T) {
 	input := `
 		return 5;
 		return 10;

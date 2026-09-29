@@ -19,7 +19,17 @@ type Parser struct {
 	peekToken token.Token
 
 	errors []string
+
+	prefixParseFns map[token.TokenType]prefixParseFn
+	infixParseFns  map[token.TokenType]infixParseFn
 }
+
+// Aliasing function types because
+// they are treated as values in golang
+type (
+	prefixParseFn func() ast.Expression
+	infixParseFn  func(ast.Expression) ast.Expression
+)
 
 func New(l *lexer.Lexer) *Parser {
 	p := &Parser{l: l, errors: []string{}}
@@ -29,6 +39,15 @@ func New(l *lexer.Lexer) *Parser {
 	p.nextToken()
 
 	return p
+}
+
+func (p *Parser) registerExpressionFn(tokenType token.TokenType, fn interface{}, expressionType string) {
+	if prefixFn, ok := fn.(prefixParseFn); expressionType == "prefix" && ok {
+		p.prefixParseFns[tokenType] = prefixFn
+	}
+	if infixFn, ok := fn.(infixParseFn); expressionType == "infix" && ok {
+		p.infixParseFns[tokenType] = infixFn
+	}
 }
 
 func (p *Parser) Errors() []string {
